@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--foreground: #171717;
+	--alt-background: #00bbbb;
+	--brand: #8527c3;
+	--brand-2: #ddd0e4;
+	--dark: #333030;
+	--cool: #23daac;
+	--topc: #fb932c;
+	--bottomc: #d0daed;
+}
+
+/* @media (prefers-color-scheme: dark) {
+	:root {
+		--foreground: #050404;
+		--brand: #8527c3;
+		--brand-2: #ddd0e4;
+		--dark: #333030;
+		--cool: #23daac;
+	}
+} */
+
+body {
+	@apply text-foreground;
+	font-family: Arial, Helvetica, sans-serif;
+}
