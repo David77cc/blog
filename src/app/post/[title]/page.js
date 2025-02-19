@@ -14,6 +14,7 @@ import { FaUserNinja } from "react-icons/fa";
 import { useInteraction } from "@/app/context/interactionContext";
 import Loading from "@/app/loading";
 import axios from "axios";
+
 export default function PostPage({ params }) {
 	const { title } = React.use(params);
 	const { posts } = usePost();
@@ -59,13 +60,9 @@ export default function PostPage({ params }) {
 		setShowComments((prev) => !prev);
 	};
 
-	const normalizeTitle = (str) => str.toLowerCase().replace(/[-\s]+/g, " ");
-
 	useEffect(() => {
 		if (title && posts?.length > 0) {
-			const foundPost = posts.find(
-				(p) => normalizeTitle(p.title) === normalizeTitle(title)
-			);
+			const foundPost = posts.find((p) => p.slug === title);
 			setPost(foundPost);
 		}
 	}, [title, posts]);

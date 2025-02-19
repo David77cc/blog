@@ -34,10 +34,6 @@ export default function Home() {
 					const source = !post.image_url
 						? "/imgs/dog.jpg"
 						: post.image_url;
-					const encodedTitle = encodeURIComponent(
-						post.title.replace(/\s+/g, "-")
-					);
-
 					const handleLike = () => {
 						const action = userInteractions?.[post.id]
 							? "remove"
@@ -88,7 +84,7 @@ export default function Home() {
 									</h3>
 								</div>
 								<Link
-									href={`post/${encodedTitle}`}
+									href={`/post/${post.slug}`}
 									className={`hover:text-brand2 transition-all duration-300 w-full h-full px-1 ${
 										darkMode ? "text-white" : "text-brand"
 									} flex items-center justify-center`}>
@@ -110,7 +106,7 @@ export default function Home() {
 							</section>
 							<section className="min-[1018px]:h-[300px] min-[1018px]:w-[95%] h-[350px] min-[1018px]:max-h-[300px] max-h-[350px] overflow-hidden flex items-center justify-center">
 								<Link
-									href={`/post/${encodedTitle}`}
+									href={`/post/${post.slug}`}
 									className="w-full h-full">
 									<Image
 										width={550}
@@ -129,7 +125,7 @@ export default function Home() {
 							<section className="flex-1 w-full border-t h-full flex flex-col items-center">
 								<div className="w-full h-[35px] flex items-center justify-center font-nunito font-bold text-brand">
 									<Link
-										href={`post/${encodedTitle}`}
+										href={`/post/${post.slug}`}
 										className="h-[100%] w-full flex bg-brand2 items-center justify-center tracking-[5px]">
 										Read
 									</Link>
@@ -166,7 +162,7 @@ export default function Home() {
 										)}
 									</span>
 									<span className="h-full w-[33.3%] flex items-center justify-center overflow-hidden gap-x-2">
-										<Link href={`post/${encodedTitle}`}>
+										<Link href={`/post/${post.slug}`}>
 											<BiCommentDetail className="text-brand text-[1.75rem]" />
 										</Link>
 										<h3 className="text-brand font-inter  text-[20px] border-l-2 border-brand2 text-center px-2">

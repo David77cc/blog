@@ -36,6 +36,14 @@ async function authenticateUser(request) {
 	}
 }
 
+const generateSlug = (title) => {
+	return title
+		.toLowerCase()
+		.replace(/[^a-z0-9\s-]/g, "")
+		.replace(/\s+/g, "-")
+		.replace(/^-+|-+$/g, "");
+};
+
 export async function GET() {
 	try {
 		const result = await db.query(
@@ -102,9 +110,11 @@ export async function POST(request) {
 			);
 		}
 
+		const slug = generateSlug(title);
+
 		const result = await db.query(
-			"INSERT INTO posts (title, content, image_url, author) VALUES ($1, $2, $3, $4) RETURNING *",
-			[title, content, image_url || null, author]
+			"INSERT INTO posts (title, content, image_url, author, slug) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+			[title, content, image_url || null, author, slug]
 		);
 		return NextResponse.json(result.rows[0], { status: 201 });
 	} catch (error) {
