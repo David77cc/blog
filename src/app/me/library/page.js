@@ -4,8 +4,7 @@ import Link from "next/link";
 import { FaBookmark, FaBookReader } from "react-icons/fa";
 import { IoMdThumbsUp } from "react-icons/io";
 export default function Library() {
-	const { userThemePref } = useAuth();
-	const { darkMode } = userThemePref;
+	const { darkMode } = useAuth();
 	return (
 		<section
 			className={`h-full w-full ${darkMode ? "bg-dark" : "bg-brand2"}`}>

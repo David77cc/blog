@@ -16,7 +16,7 @@ export default function Me() {
 	const [isUpLoading, setIsUpLoading] = useState(false);
 	const [message, setMessage] = useState("");
 	const [openModal, setOpenModal] = useState(false);
-	const { userData, isLoading, fetchUserData, logout } = useAuth();
+	const { userData, isLoading, fetchUserData, logout, color } = useAuth();
 	const { id, name, email, created_time, created_at, display_name, pfp } =
 		userData;
 	const [fullScreen, setFullScreen] = useState(false);
@@ -95,6 +95,11 @@ export default function Me() {
 		setUrlMethod((prev) => !prev);
 	}
 
+	const userProfile = {
+		backgroundColor: pfp ? "#222" : color?.profileDisplay?.pbg,
+		color: color?.profileDisplay?.ptc,
+	};
+
 	return (
 		<>
 			{(isLoading || isUpLoading) && <Loading />}
@@ -102,14 +107,13 @@ export default function Me() {
 				<article className="w-full h-full flex flex-col items-center py-8 gap-y-4 ">
 					<div className="w-[17rem] h-[17rem] flex flex-col items-center justify-center relative">
 						<div
-							className={`${
-								!pfp ? "bg-[#5d5]" : ""
-							} rounded-full overflow-hidden flex items-center justify-center cursor-pointer shadow-[0_0_3px_2px_#555]
+							className={`rounded-full overflow-hidden flex items-center justify-center cursor-pointer shadow-[0_0_3px_2px_#555]
 							${
 								fullScreen
-									? "fixed top-0 left-0 w-full h-full rounded-none bg-[#222] bg-opacity-[1] z-[102]"
-									: "relative h-[14rem] w-[14rem] "
+									? "fixed top-0 left-0 right-0 w-full h-full rounded-none  bg-opacity-[.9] z-[102]"
+									: "relative h-[14rem] w-[14rem] bg-transparent"
 							} translate-all duration-500 ease-in-out`}
+							style={userProfile}
 							onClick={!fullScreen ? toggleModal : undefined}>
 							{pfp ? (
 								<img
@@ -125,7 +129,7 @@ export default function Me() {
 								</h2>
 							)}
 							{!fullScreen && (
-								<div className="absolute w-full h-full rounded-full opacity-0 hover:opacity-[1] bg-[#0008] overflow-hidden flex flex-col items-center justify-center transition-all duration-300 px-2">
+								<div className="absolute w-full h-full rounded-full opacity-0 hover:opacity-[1] bg-[#0008]  overflow-hidden flex flex-col items-center justify-center transition-all duration-300 px-2">
 									<FcCamera className="text-[2rem]" />
 									<h3 className="text-center font-roboto font-[400] text-[15px] text-[#fff]">
 										Change Profile Picture

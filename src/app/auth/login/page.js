@@ -170,10 +170,10 @@ export default function Login() {
 							className="font-bold font-montserrat text-[#00d]">
 							Sign Up
 						</Link>
-						<span className="font-bold font-montserrat text-[#f22] cursor-pointer">
-							Forgot Password?
-						</span>
 					</div>
+					<span className="font-bold font-montserrat text-[#f22] cursor-pointer">
+						Forgot Password?
+					</span>
 				</form>
 				{errorModal && <ErrorModal />}
 			</section>

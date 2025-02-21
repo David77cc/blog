@@ -11,7 +11,7 @@ import Loading from "./loading";
 import Image from "next/image";
 import { useInteraction } from "./context/interactionContext";
 export default function Home() {
-	const { isLoading, userData, userThemePref } = useAuth();
+	const { isLoading, userData, darkMode, color } = useAuth();
 	const { posts } = usePost();
 	const {
 		likes,
@@ -21,7 +21,6 @@ export default function Home() {
 		reads,
 		comments,
 	} = useInteraction();
-	const { darkMode } = userThemePref;
 
 	return (
 		<>
@@ -57,6 +56,13 @@ export default function Home() {
 						(comment) => comment.post_id === id
 					);
 
+					const userProfile = {
+						backgroundColor: pfp
+							? "transparent"
+							: color.profileDisplay.pbg,
+						color: color.profileDisplay.ptc,
+					};
+
 					return (
 						<article
 							className="min-[1018px]:w-[485px] min-[1018px]:h-[550px] h-[600px] w-[98%] shadow-[0_0_8px_#aaa] flex items-center justify-center flex-col hover:shadow-[0_0_25px_10px_#aaa] transition-all duration-300 gap-y-2 overflow-hidden"
@@ -64,9 +70,8 @@ export default function Home() {
 							<section className="relative flex-1 w-full h-full border-b border-brand2 max-h-[220px] pl-4 pr-2 flex flex-col items-center gap-y-2 overflow-hidden">
 								<div className="flex items-center w-full gap-x-2 py-2">
 									<span
-										className={`${
-											pfp ? "bg-transparent" : "bg-[#4aa]"
-										} w-[55px] h-[55px] font-bold font-poppins text-white flex items-center justify-center rounded-full border-brand2 cursor-pointer hover:shadow-[0_0_5px_1px_#222] transition-all duration-300`}>
+										className={`w-[55px] h-[55px] font-bold font-poppin flex items-center justify-center rounded-full border-brand2 cursor-pointer hover:shadow-[0_0_5px_1px_#222] transition-all duration-300`}
+										style={userProfile}>
 										{(
 											<img
 												src={pfp}

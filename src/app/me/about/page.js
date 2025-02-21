@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
-export default function About() {
+export default function AboutMe() {
 	const { userData } = useAuth();
 	return (
 		<section className="h-screen w-full flex items-center justify-center bg-brand">

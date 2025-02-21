@@ -71,7 +71,7 @@ export default function CreatePost() {
 		<section className="min-h-screen w-full bg-[#d0dde4] flex items-center justify-center p-2">
 			<form
 				onSubmit={handleSubmit}
-				className="min-h-[700px] relative py-8 w-[95%] border rounded-[2rem] flex flex-col items-center justify-center gap-y-8 shadow-lg bg-[#c0d356] overflow-hidden px-2">
+				className="min-h-[700px] relative py-8 min-[800px]:w-[95%] w-full border rounded-[.5rem] flex flex-col items-center justify-center gap-y-8 shadow-lg bg-white overflow-hidden px-2">
 				<input
 					type="text"
 					name="title"
@@ -80,7 +80,7 @@ export default function CreatePost() {
 					required
 					autoComplete="title"
 					placeholder="Post Title"
-					className="outline-none font-poppins font-medium border border-[#d0dde4] rounded-[3rem] w-[85%] h-[35px] flex text-center placeholder:uppercase"
+					className="outline-none font-poppins font-medium border border-[#d0dde4] rounded-[3rem] w-[85%] h-[35px] flex placeholder:uppercase indent-4"
 				/>
 				<textarea
 					name="content"

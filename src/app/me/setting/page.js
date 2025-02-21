@@ -13,6 +13,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import { BiSolidUserAccount } from "react-icons/bi";
+import { SketchPicker } from "react-color";
 
 export default function Setting() {
 	const {
@@ -20,11 +21,15 @@ export default function Setting() {
 		logout,
 		userData,
 		fetchUserData,
-		userThemePref,
-		changeMode,
-		changeThemePref,
+		toggleDarkMode,
+		color,
+		getActiveColor,
+		handleColorChange,
+		showPicker,
+		closePicker,
+		darkMode,
+		handleEditClick,
 	} = useAuth();
-	const { darkMode } = userThemePref;
 	const [optionText, setOptionText] = useState("account");
 	const [openModal, setOpenModal] = useState(false);
 	const [passwordModal, setPasswordModal] = useState(false);
@@ -265,7 +270,7 @@ export default function Setting() {
 					<BsFillPaletteFill className="absolute animate-bounce top-2 text-[3rem] text-brand2" />
 					<button
 						className="w-full h-[2.3rem] border-b-2 flex items-center justify-between text-left pl-2 text-[1.3rem] text-[#2ff] hover:text-brand2 transition-all duration-300"
-						onClick={changeMode}>
+						onClick={toggleDarkMode}>
 						{darkMode ? "Light Mode" : "Dark Mode"}
 						{!darkMode ? (
 							<RiMoonFill className="text-[1.6rem]" />
@@ -508,44 +513,114 @@ export default function Setting() {
 								ref={themeRef}>
 								<section className="h-4/5 w-1/3 border-r-2 border-cool flex items-center justify-center overflow-hidden">
 									{themeModal.action === "pc" ? (
-										<div className="min-[800px]:w-[10rem] min-[800px]:h-[10rem] h-[6.5rem] w-[6.5rem] bg-brand rounded-full flex items-center justify-center text-[4rem] text-cool font-bold">
+										<div
+											className={`min-[800px]:w-[10rem] min-[800px]:h-[10rem] h-[6.5rem] w-[6.5rem] rounded-full flex items-center justify-center text-[4rem] font-bold`}
+											style={{
+												backgroundColor:
+													color.profileDisplay.pbg,
+												color: color.profileDisplay.ptc,
+											}}>
 											{userData?.name?.[0]}
 										</div>
 									) : (
 										<section className="h-full w-full flex items-center justify-center flex-col gap-y-6">
-											<div className="w-[5rem] h-[5rem] min-[800px]:h-[8rem] min-[800px]:w-[8rem] bg-topc rounded-full"></div>
-											<div className="w-[5rem] h-[5rem] min-[800px]:h-[8rem] min-[800px]:w-[8rem] bg-bottomc rounded-full"></div>
-											<div className="w-4/5 h-[3rem] bg-[orange] rounded-[1.3rem] text-[1.2rem] flex items-center justify-center font-bold">
+											<div
+												className={`w-[5rem] h-[5rem] min-[800px]:h-[8rem] min-[800px]:w-[8rem] rounded-full`}
+												style={{
+													backgroundColor:
+														color.profileCarousel
+															.topcrl,
+												}}></div>
+											<div
+												className={`w-[5rem] h-[5rem] min-[800px]:h-[8rem] min-[800px]:w-[8rem] bg-[${color.profileCarousel.bottomcrl}] rounded-full`}
+												style={{
+													backgroundColor:
+														color.profileCarousel
+															.bottomcrl,
+												}}></div>
+											<div
+												className={`w-4/5 h-[3rem]  rounded-[1.3rem] text-[1.2rem] flex items-center bg-brand justify-center font-bold`}
+												style={{
+													color: color.profileCarousel
+														.textcolor,
+												}}>
 												{userData?.name.split(" ")[0]}
 											</div>
 										</section>
 									)}
 								</section>
 								<section className="flex justify-center items-center w-2/3 h-full flex-col gap-y-[3rem]">
+									{showPicker && (
+										<div className="absolute h-[380px] w-[250px] rounded-[3px] z-[150] bg-[#a337] flex items-center justify-evenly overflow-hidden flex-col">
+											<SketchPicker
+												color={getActiveColor()}
+												onChange={(newColor) =>
+													handleColorChange(newColor)
+												}
+											/>
+											<button
+												className="w-[90%] h-[2rem] bg-[#0ff] rounded-[3px] text-[#a33] font-bold"
+												onClick={closePicker}>
+												Close
+											</button>
+										</div>
+									)}
 									{themeModal.action === "pc" ? (
 										<>
 											<div className="h-[2.5rem] w-10/12 border-b-2 border-cool text-[.95rem] min-[800px]:text-[1.2rem] flex items-center justify-between px-1 text-brand">
 												Change Background Color
-												<RiPenNibFill className="text-brand text-[1.4rem] cursor-pointer" />
+												<RiPenNibFill
+													className="text-brand text-[1.4rem] cursor-pointer"
+													onClick={() =>
+														handleEditClick("pbg")
+													}
+												/>
 											</div>
+
 											<div className="h-[2.5rem] w-10/12 border-b-2 border-cool text-[.95rem] min-[800px]:text-[1.2rem] flex items-center justify-between px-1 text-brand">
 												Change Text Color
-												<RiPenNibFill className="text-brand text-[1.4rem] cursor-pointer" />
+												<RiPenNibFill
+													className="text-brand text-[1.4rem] cursor-pointer"
+													onClick={() =>
+														handleEditClick("ptc")
+													}
+												/>
 											</div>
 										</>
 									) : (
 										<>
 											<div className="h-[2.5rem] w-10/12 border-b-2 border-cool text-[.95rem] min-[800px]:text-[1.2rem] flex items-center justify-between px-1 text-brand">
 												Change Top Carousel Color
-												<RiPenNibFill className="text-brand text-[1.4rem] cursor-pointer" />
+												<RiPenNibFill
+													className="text-brand text-[1.4rem] cursor-pointer"
+													onClick={() =>
+														handleEditClick(
+															"topcrl"
+														)
+													}
+												/>
 											</div>
 											<div className="h-[2.5rem] w-10/12 border-b-2 border-cool text-[.95rem] min-[800px]:text-[1.2rem] flex items-center justify-between px-1 text-brand">
 												Change Bottom Carousel Color
-												<RiPenNibFill className="text-brand text-[1.4rem] cursor-pointer" />
+												<RiPenNibFill
+													className="text-brand text-[1.4rem] cursor-pointer"
+													onClick={() =>
+														handleEditClick(
+															"bottomcrl"
+														)
+													}
+												/>
 											</div>
 											<div className="h-[2.5rem] w-10/12 border-b-2 border-cool text-[.95rem] min-[800px]:text-[1.2rem] flex items-center justify-between px-1 text-brand">
 												Change Carousel Text Color
-												<RiPenNibFill className="text-brand text-[1.4rem] cursor-pointer" />
+												<RiPenNibFill
+													className="text-brand text-[1.4rem] cursor-pointer"
+													onClick={() =>
+														handleEditClick(
+															"textcolor"
+														)
+													}
+												/>
 											</div>
 										</>
 									)}

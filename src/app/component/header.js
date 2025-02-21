@@ -26,9 +26,9 @@ export default function Header() {
 		userData,
 		isAuthenticated,
 		logout,
-		changeThemePref,
-		changeMode,
-		userThemePref,
+		toggleDarkMode,
+		darkMode,
+		color,
 	} = useAuth();
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [show, setShow] = useState(false);
@@ -41,7 +41,6 @@ export default function Header() {
 	const pathname = usePathname();
 
 	const { name, display_name, pfp } = userData;
-	const { darkMode } = userThemePref;
 
 	const navigations = [
 		{ id: 1, text: "home", links: "/", Icon: RiHome4Fill },
@@ -68,6 +67,11 @@ export default function Header() {
 
 	const toggleNavBar = () => {
 		setnavBar((prev) => !prev);
+	};
+
+	const userProfile = {
+		backgroundColor: color.profileDisplay.pbg,
+		color: color.profileDisplay.ptc,
 	};
 
 	const hover =
@@ -202,9 +206,10 @@ export default function Header() {
 						{/* User Profile picx */}
 						<section className="h-full w-[7rem] relative flex flex-col items-center justify-center">
 							<div
-								className="h-[55px] w-[55px] rounded-full text-[1.5rem] text-[#ff0] font-bold bg-[#5d5] flex items-center justify-center overflow-hidden cursor-pointer hover:bg-[#3b3] hover:shadow-[0_0_5px_5px_#555] transition-all duration-500 shadow-[0_0_6px_2px_#222]"
+								className={`h-[55px] w-[55px] rounded-full text-[1.5rem] font-bold flex items-center justify-center overflow-hidden cursor-pointer hover:bg-brand2 hover:shadow-[0_0_5px_5px_#555] transition-all duration-500 shadow-[0_0_6px_2px_#222]`}
 								onClick={toggleModalVisibility}
-								ref={buttonRef}>
+								ref={buttonRef}
+								style={userProfile}>
 								{!pfp && name[0]}
 								{pfp && (
 									<img
@@ -217,20 +222,36 @@ export default function Header() {
 						</section>
 						{/* User modal */}
 						<div
-							className={`absolute w-[300px] h-[650px] bg-bottomc top-[5rem] right-5 flex flex-col items-center justify-center rounded-[1rem] overflow-hidden shadow-[0_0_6px_#323] transition-opacity duration-500 ease-in-out ${
+							className={`absolute w-[300px] h-[650px] top-[5rem] right-5 flex flex-col items-center justify-center rounded-[1rem] overflow-hidden shadow-[0_0_6px_#323] transition-opacity duration-500 ease-in-out ${
 								show
 									? "opacity-100 visible pointer-events-auto"
 									: "opacity-0 invisible pointer-events-none"
 							}`}
-							ref={modalRef}>
+							ref={modalRef}
+							style={{
+								backgroundColor:
+									color?.profileCarousel?.bottomcrl,
+								color: color?.profileCarousel?.textcolor,
+							}}>
 							{/* Design part */}
 							<div className="h-[150px] relative border-b-2 w-full">
-								<div className="w-full h-2/4 bg-topc"></div>
-								<div className="absolute h-[60px] w-[60px] rounded-full top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center border-4 border-[#d0daed]">
+								<div
+									className="w-full h-2/4"
+									style={{
+										backgroundColor:
+											color?.profileCarousel?.topcrl,
+									}}></div>
+								<div
+									className="absolute h-[60px] w-[60px] rounded-full top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center border-4"
+									style={{
+										borderColor:
+											color?.profileCarousel?.topcrl,
+									}}>
 									<div
-										className={`h-full w-full rounded-full text-[1.5rem] text-[#ff0] font-bold bg-[#5d5] flex overflow-hidden items-center justify-center cursor-pointer hover:bg-[#3b3] transition-all duration-300 ${
+										className={`h-full w-full rounded-full text-[1.5rem] font-bold flex overflow-hidden items-center justify-center cursor-pointer  transition-all duration-300 ${
 											show ? "animate-rotate-anime" : ""
-										}`}>
+										}`}
+										style={userProfile}>
 										{!pfp && name[0]}
 										{pfp && (
 											<img
@@ -241,7 +262,7 @@ export default function Header() {
 										)}
 									</div>
 								</div>
-								<div className="flex-1 w-full flex flex-col items-center pt-6">
+								<div className="flex-1 w-full flex flex-col items-center pt-7">
 									<h1 className="font-bold font-nunito">
 										Hi, {userData?.name}
 									</h1>
@@ -303,14 +324,20 @@ export default function Header() {
 
 								<span
 									className="w-full h-[30px] flex items-center justify-center bg-brand rounded-[.5rem] overflow-hidden text-white"
-									ref={toggleModeRef}>
+									ref={toggleModeRef}
+									style={{
+										backgroundColor:
+											color?.profileCarousel?.topcrl,
+										color: color?.profileCarousel
+											?.textcolor,
+									}}>
 									<FaMoon
 										className={`text-[1.2rem] cursor-pointer ${
 											darkMode
 												? "-translate-x-[9rem]"
 												: "translate-x-0"
 										} hover:text-brand2 transition-all duration-300`}
-										onClick={changeMode}
+										onClick={toggleDarkMode}
 									/>
 									<FaSun
 										className={`text-[1.2rem] cursor-pointer ${
@@ -318,12 +345,12 @@ export default function Header() {
 												? "translate-x-0"
 												: "translate-x-[9rem]"
 										} hover:text-brand2 transition-all duration-300`}
-										onClick={changeMode}
+										onClick={toggleDarkMode}
 									/>
 								</span>
 							</div>
 							{/* Sign Out */}
-							<div className="h-[5rem] border w-full flex flex-col justify-center items-center">
+							<div className="h-[5rem] w-full flex flex-col justify-center items-center">
 								<span
 									className="font-bold text-[#d41d1d] hover:text-[#d45c5c] cursor-pointer transition-colors duration-500"
 									onClick={logout}>

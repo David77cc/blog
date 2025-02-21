@@ -19,7 +19,7 @@ export default function PostPage({ params }) {
 	const { title } = React.use(params);
 	const { posts } = usePost();
 	const [post, setPost] = useState(null);
-	const { isLoading, userData, isAuthenticated } = useAuth();
+	const { isLoading, userData, isAuthenticated, color } = useAuth();
 	const [isEditing, setIsEditing] = useState(false);
 	const [showComment, setShowComments] = useState(false);
 	const [option, setOption] = useState({});
@@ -126,6 +126,13 @@ export default function PostPage({ params }) {
 		}
 	};
 
+	const userProfile = {
+		backgroundColor: userData?.pfp
+			? "transparent"
+			: color?.profileDisplay?.pbg,
+		color: color?.profileDisplay?.ptc,
+	};
+
 	return (
 		<>
 			{isLoading && <Loading />}
@@ -188,17 +195,17 @@ export default function PostPage({ params }) {
 							</h3>
 						</span>
 					</div>
-					<article className="w-full min-[900px]:w-[75%] h-[600px] overflow-hidden">
+					<article className="w-full min-[900px]:w-[65%] h-full min-h-[300px] max-h-[600px] overflow-hidden border">
 						<Image
 							width={500}
 							height={350}
 							src={source}
 							alt={post.title}
 							priority
-							className="w-full h-full mb-4 object-contain "
+							className="w-full mb-4 object-contain "
 						/>
 					</article>
-					<p className="w-full h-full font-roboto text-[15px]  text-justify pt-2 tracking-[1px]">
+					<p className="w-full h-full font-roboto text-[17px] font-medium text-justify pt-2 tracking-[1px]">
 						{post.content}
 						{". "}
 					</p>
@@ -255,7 +262,7 @@ export default function PostPage({ params }) {
 													</span>
 												)) ||
 												(content && name && !pfp && (
-													<span className="flex h-[45px] w-[45px] rounded-full items-center justify-center font-bold text-[21px] bg-[#40b040] text-white">
+													<span className="flex h-[45px] w-[45px] rounded-full items-center justify-center font-bold text-[21px] text-[#ff0] bg-brand">
 														{userData?.name?.[0]}
 													</span>
 												))}
@@ -334,7 +341,9 @@ export default function PostPage({ params }) {
 												className="object-cover w-[50px] h-[50px] rounded-full "
 											/>
 										) : (
-											<div className="h-[50px] w-[50px] rounded-full bg-[#8abdbd] flex items-center justify-center font-bold text-[21px] text-white">
+											<div
+												className="h-[50px] w-[50px] rounded-full flex items-center justify-center font-bold text-[21px]"
+												style={userProfile}>
 												{userData?.name?.[0]}
 											</div>
 										)}

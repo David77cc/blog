@@ -1,26 +1,30 @@
 import { NextResponse } from "next/server";
-import { verify } from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
-export function middleware(req) {
-	const token = req.cookies.get("token");
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+
+export async function middleware(req) {
+	const token = req.cookies.get("token")?.value || null;
 	const url = req.nextUrl.pathname;
 
-	const publicRoutes = ["/", "/about"];
+	console.log("Middleware is running for:", url);
+
+	// const publicRoutes = ["/", "/about"];
 	const authRoutes = ["/auth/login", "/auth/signup"];
-	const protectedRoutes = ["/dashboard", "/me", "/me/setting", "me/library"];
+	const protectedRoutes = ["/me", "/me/setting", "/me/library", "/create"];
 
 	if (token && authRoutes.includes(url)) {
 		return NextResponse.redirect(new URL("/", req.url));
 	}
 
 	if (!token && protectedRoutes.includes(url)) {
+		if (url === "/auth/login") return NextResponse.next();
 		return NextResponse.redirect(new URL("/auth/login", req.url));
 	}
 
 	if (token) {
 		try {
-			const decoded = verify(token, process.env.JWT_SECRET);
-			req.user = decoded;
+			const { payload } = await jwtVerify(token, JWT_SECRET);
 		} catch (err) {
 			console.log("Invalid token:", err);
 			return NextResponse.redirect(new URL("/auth/login", req.url));
@@ -31,5 +35,5 @@ export function middleware(req) {
 }
 
 export const config = {
-	matcher: ["/me", "/auth/login", "/auth/signup", "/create", "me/setting"],
+	matcher: ["/me/:path*", "/auth/:path*", "/create"],
 };

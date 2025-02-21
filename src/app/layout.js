@@ -6,8 +6,6 @@ import PostProvider from "./context/PostContext";
 import Header from "./component/header";
 import Footer from "./component/footer";
 
-{
-	/*
 import {
 	Poppins,
 	Roboto,
@@ -48,15 +46,13 @@ const montserrat = Montserrat({
 	subsets: ["latin"],
 	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 	variable: "--font-montserrat",
-});*/
-}
+});
 
 export default function RootLayout({ children }) {
-	{
-		/*className={`${roboto.variable} ${poppins.variable} ${inter.variable} ${nunito.variable} ${ubuntu.variable} ${montserrat.variable}`}*/
-	}
 	return (
-		<html lang="en">
+		<html
+			lang="en"
+			className={`${roboto.variable} ${poppins.variable} ${inter.variable} ${nunito.variable} ${ubuntu.variable} ${montserrat.variable}`}>
 			<head>
 				<meta
 					name="viewport"

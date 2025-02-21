@@ -15,29 +15,64 @@ export default function AuthProvider({ children }) {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [errorModal, setErrorModal] = useState();
-	const [userThemePref, setUserThemePref] = useState({
-		darkMode: false,
-		userPanel: "",
-		userSecondPanel: "",
-		textColor: "",
-		profileCC: "",
-	});
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [displayName, setDisplayName] = useState("");
+	const [darkMode, setDarkMode] = useState(false);
+	const [color, setColor] = useState({
+		profileDisplay: {
+			pbg: "#8527c3",
+			ptc: "#ff0",
+		},
+		profileCarousel: {
+			topcrl: "#fb932c",
+			bottomcrl: "#d0daed",
+			textcolor: "#000",
+		},
+	});
 
-	const changeThemePref = (key, value) => {
-		setUserThemePref((prev) => ({
-			...prev,
-			[key]: value,
-		}));
+	const toggleDarkMode = () => {
+		setDarkMode((prev) => !prev);
 	};
 
-	const changeMode = () => {
-		setUserThemePref((prev) => ({
-			...prev,
-			darkMode: !prev.darkMode,
-		}));
+	const [showPicker, setShowPicker] = useState(false);
+	const [activeColorKey, setActiveColorKey] = useState(null);
+
+	const handleEditClick = (key) => {
+		setActiveColorKey(key);
+		setShowPicker(true);
+	};
+
+	const handleColorChange = (newColor) => {
+		if (!activeColorKey) return;
+
+		setColor((prev) => {
+			const updatedColors = { ...prev };
+			for (const section in updatedColors) {
+				if (activeColorKey in updatedColors[section]) {
+					updatedColors[section][activeColorKey] = newColor.hex;
+					break;
+				}
+			}
+			return { ...updatedColors };
+		});
+	};
+
+	const getActiveColor = () => {
+		if (!activeColorKey) return "#000";
+
+		for (const section in color) {
+			if (activeColorKey in color[section]) {
+				return color[section][activeColorKey];
+			}
+		}
+
+		return "#000";
+	};
+
+	const closePicker = () => {
+		setShowPicker(false);
+		setActiveColorKey(null);
 	};
 
 	useEffect(() => {
@@ -173,10 +208,14 @@ export default function AuthProvider({ children }) {
 				displayName,
 				setDisplayName,
 				fetchUserData,
-				userThemePref,
-				setUserThemePref,
-				changeThemePref,
-				changeMode,
+				color,
+				showPicker,
+				closePicker,
+				getActiveColor,
+				handleColorChange,
+				handleEditClick,
+				toggleDarkMode,
+				darkMode,
 			}}>
 			{children}
 		</AuthContext.Provider>
